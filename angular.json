@@ -1,0 +1,154 @@
+{
+  "version": 1,
+  "cli": {
+    "defaultCollection": "@nrwl/angular"
+  },
+  "defaultProject": "laudebugs",
+  "schematics": {
+    "@nrwl/angular": {
+      "application": {
+        "linter": "eslint"
+      },
+      "library": {
+        "linter": "eslint"
+      },
+      "storybook-configuration": {
+        "linter": "eslint"
+      }
+    },
+    "@nrwl/angular:application": {
+      "style": "scss",
+      "linter": "eslint",
+      "unitTestRunner": "jest",
+      "e2eTestRunner": "cypress"
+    },
+    "@nrwl/angular:library": {
+      "style": "scss",
+      "linter": "eslint",
+      "unitTestRunner": "jest"
+    },
+    "@nrwl/angular:component": {
+      "style": "scss"
+    }
+  },
+  "projects": {
+    "laudebugs": {
+      "projectType": "application",
+      "root": "apps/laudebugs",
+      "sourceRoot": "apps/laudebugs/src",
+      "prefix": "lau-de-bugs",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/apps/laudebugs",
+            "index": "apps/laudebugs/src/index.html",
+            "main": "apps/laudebugs/src/main.ts",
+            "polyfills": "apps/laudebugs/src/polyfills.ts",
+            "tsConfig": "apps/laudebugs/tsconfig.app.json",
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              "apps/laudebugs/src/favicon.ico",
+              "apps/laudebugs/src/assets"
+            ],
+            "styles": ["apps/laudebugs/src/styles.scss"],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "apps/laudebugs/src/environments/environment.ts",
+                  "with": "apps/laudebugs/src/environments/environment.prod.ts"
+                }
+              ],
+              "outputHashing": "all"
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "configurations": {
+            "production": {
+              "browserTarget": "laudebugs:build:production"
+            },
+            "development": {
+              "browserTarget": "laudebugs:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "laudebugs:build"
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "apps/laudebugs/src/**/*.ts",
+              "apps/laudebugs/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/apps/laudebugs"],
+          "options": {
+            "jestConfig": "apps/laudebugs/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "laudebugs-e2e": {
+      "root": "apps/laudebugs-e2e",
+      "sourceRoot": "apps/laudebugs-e2e/src",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/laudebugs-e2e/cypress.json",
+            "tsConfig": "apps/laudebugs-e2e/tsconfig.e2e.json",
+            "devServerTarget": "laudebugs:serve:development"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "laudebugs:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/laudebugs-e2e/**/*.{js,ts}"]
+          }
+        }
+      }
+    }
+  }
+}
