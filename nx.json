@@ -25,6 +25,12 @@
     "laudebugs-e2e": {
       "tags": [],
       "implicitDependencies": ["laudebugs"]
+    },
+    "api": {
+      "tags": []
+    },
+    "models": {
+      "tags": []
     }
   }
 }
